@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SNC Finance Admin — Leads</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Inter, system-ui, sans-serif; background: #F4F5F1; color: #1A2E24; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: #1F5C3F; color: #fff; }
+    .topbar h1 { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: 0.2px; }
+    .topbar .actions { display: flex; gap: 10px; }
+    .btn { background: #fff; color: #1F5C3F; border: none; padding: 8px 14px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; font-family: inherit; }
+    .btn.ghost { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+    .btn.ghost:hover { background: rgba(255,255,255,0.1); }
+
+    .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .login-card { background: #fff; padding: 32px; border-radius: 12px; width: 100%; max-width: 360px; box-shadow: 0 10px 40px rgba(0,0,0,0.06); }
+    .login-card h2 { margin: 0 0 6px; font-size: 22px; }
+    .login-card p { margin: 0 0 22px; color: #5C6B63; font-size: 13.5px; }
+    .login-card label { display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 6px; color: #3A4842; }
+    .login-card input { width: 100%; padding: 12px 14px; font-size: 14px; border: 1.5px solid #D8D8D2; border-radius: 8px; outline: none; margin-bottom: 14px; font-family: inherit; }
+    .login-card input:focus { border-color: #1F5C3F; }
+    .login-card button { width: 100%; padding: 12px; background: #1F5C3F; color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; }
+    .login-error { color: #C5453B; font-size: 12.5px; margin-top: 6px; min-height: 16px; }
+
+    .container { padding: 24px; max-width: 1400px; margin: 0 auto; }
+    .stats { display: flex; gap: 14px; margin-bottom: 20px; flex-wrap: wrap; }
+    .stat { background: #fff; border-radius: 10px; padding: 14px 18px; min-width: 140px; }
+    .stat-label { font-size: 11px; color: #6A766F; text-transform: uppercase; letter-spacing: 0.6px; font-weight: 600; }
+    .stat-value { font-size: 24px; font-weight: 600; margin-top: 4px; }
+
+    .toolbar { display: flex; gap: 10px; margin-bottom: 14px; align-items: center; flex-wrap: wrap; }
+    .search { flex: 1; min-width: 200px; padding: 9px 14px; border: 1.5px solid #D8D8D2; border-radius: 8px; font-size: 13px; outline: none; font-family: inherit; }
+    .search:focus { border-color: #1F5C3F; }
+
+    table { width: 100%; background: #fff; border-collapse: collapse; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    th, td { text-align: left; padding: 11px 14px; font-size: 13px; border-bottom: 1px solid #EDEEE9; }
+    th { background: #FAFAF7; font-weight: 600; color: #3A4842; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.4px; position: sticky; top: 0; }
+    tbody tr:hover { background: #FAFAF7; }
+    td.mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; }
+    .pill { display: inline-block; padding: 2px 8px; background: #E8F0EB; color: #1F5C3F; border-radius: 4px; font-size: 11px; font-weight: 600; }
+    .pill.gray { background: #EDEEE9; color: #6A766F; }
+    .empty { text-align: center; padding: 60px 20px; color: #6A766F; }
+    .small { font-size: 11px; color: #9AA8A0; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script>
+    const root = document.getElementById('root');
+
+    async function checkAuth() {
+      const r = await fetch('/api/admin/me').then(r => r.json());
+      if (r.authenticated) renderDashboard(); else renderLogin();
+    }
+
+    function renderLogin(errMsg) {
+      root.innerHTML = `
+        <div class="login-wrap">
+          <div class="login-card">
+            <h2>SNC Finance Admin</h2>
+            <p>Sign in to view leads.</p>
+            <form id="loginForm">
+              <label>Username</label>
+              <input id="user" type="text" autocomplete="username" required />
+              <label>Password</label>
+              <input id="pass" type="password" autocomplete="current-password" required />
+              <button type="submit">Sign in</button>
+              <div class="login-error" id="loginErr">${errMsg || ''}</div>
+            </form>
+          </div>
+        </div>`;
+      document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const user = document.getElementById('user').value;
+        const pass = document.getElementById('pass').value;
+        const res = await fetch('/api/admin/login', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user, pass }),
+        });
+        if (res.ok) renderDashboard();
+        else renderLogin('Invalid username or password');
+      });
+    }
+
+    async function renderDashboard() {
+      root.innerHTML = `
+        <div class="topbar">
+          <h1>SNC Finance — Leads</h1>
+          <div class="actions">
+            <a class="btn" href="/api/admin/leads.csv" download>Download CSV</a>
+            <button class="btn ghost" id="logoutBtn">Logout</button>
+          </div>
+        </div>
+        <div class="container">
+          <div class="stats" id="stats"></div>
+          <div class="toolbar">
+            <input class="search" id="search" placeholder="Search by name, mobile, email, source..." />
+            <button class="btn" id="refreshBtn" style="background:#1F5C3F;color:#fff;">Refresh</button>
+          </div>
+          <div id="tableWrap"><div class="empty">Loading...</div></div>
+        </div>`;
+      document.getElementById('logoutBtn').addEventListener('click', async () => {
+        await fetch('/api/admin/logout', { method: 'POST' });
+        renderLogin();
+      });
+      document.getElementById('refreshBtn').addEventListener('click', loadLeads);
+      document.getElementById('search').addEventListener('input', (e) => filterRender(e.target.value));
+      loadLeads();
+    }
+
+    let allLeads = [];
+
+    async function loadLeads() {
+      const wrap = document.getElementById('tableWrap');
+      wrap.innerHTML = `<div class="empty">Loading...</div>`;
+      try {
+        const r = await fetch('/api/admin/leads').then(r => r.json());
+        allLeads = r.leads || [];
+        renderStats(allLeads);
+        filterRender(document.getElementById('search').value);
+      } catch (e) {
+        wrap.innerHTML = `<div class="empty">Failed to load leads.</div>`;
+      }
+    }
+
+    function renderStats(leads) {
+      const today = new Date(); today.setHours(0,0,0,0);
+      const todayCount = leads.filter(l => new Date(l.created_at) >= today).length;
+      const week = new Date(Date.now() - 7*24*60*60*1000);
+      const weekCount = leads.filter(l => new Date(l.created_at) >= week).length;
+      const sources = {};
+      leads.forEach(l => { const s = l.utm_source || 'direct'; sources[s] = (sources[s]||0)+1; });
+      const topSource = Object.entries(sources).sort((a,b) => b[1]-a[1])[0];
+      document.getElementById('stats').innerHTML = `
+        <div class="stat"><div class="stat-label">Total leads</div><div class="stat-value">${leads.length}</div></div>
+        <div class="stat"><div class="stat-label">Today</div><div class="stat-value">${todayCount}</div></div>
+        <div class="stat"><div class="stat-label">Last 7 days</div><div class="stat-value">${weekCount}</div></div>
+        <div class="stat"><div class="stat-label">Top source</div><div class="stat-value" style="font-size:16px;text-transform:capitalize;">${topSource ? topSource[0] + ' (' + topSource[1] + ')' : '—'}</div></div>
+      `;
+    }
+
+    function filterRender(query) {
+      const q = (query || '').trim().toLowerCase();
+      const filtered = !q ? allLeads : allLeads.filter(l =>
+        [l.name, l.mobile, l.email, l.utm_source, l.utm_campaign].filter(Boolean).some(v => String(v).toLowerCase().includes(q))
+      );
+      const wrap = document.getElementById('tableWrap');
+      if (filtered.length === 0) {
+        wrap.innerHTML = `<div class="empty">No leads ${q ? 'match your search' : 'yet — share your landing page to start collecting'}.</div>`;
+        return;
+      }
+      const fmt = (d) => {
+        const dt = new Date(d);
+        return dt.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) + ' · ' +
+               dt.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+      };
+      const rows = filtered.map(l => `
+        <tr>
+          <td class="mono">HM${String(l.id).padStart(6,'0')}</td>
+          <td><b>${escape(l.name)}</b></td>
+          <td class="mono">+91 ${escape(l.mobile)}</td>
+          <td>${escape(l.email || '—')}</td>
+          <td>${l.utm_source ? `<span class="pill">${escape(l.utm_source)}</span>` : '<span class="pill gray">direct</span>'}</td>
+          <td>${escape(l.utm_campaign || '—')}</td>
+          <td>${l.consent_whatsapp ? '✓' : '—'}</td>
+          <td class="small">${fmt(l.created_at)}</td>
+        </tr>`).join('');
+      wrap.innerHTML = `
+        <table>
+          <thead><tr>
+            <th>Ref</th><th>Name</th><th>Mobile</th><th>Email</th>
+            <th>Source</th><th>Campaign</th><th>WA</th><th>When</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+    }
+
+    function escape(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+    checkAuth();
+  </script>
+</body>
+</html>

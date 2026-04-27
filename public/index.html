@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="theme-color" content="#1F5C3F" />
+  <title>SNC Finance — Lowest Home Loan Rates from 7.75% p.a.</title>
+  <meta name="description" content="Get the lowest home loan rates starting from 7.75% p.a. Approval in 24 hours. ₹0 prepayment charges. Apply now." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="page">
+    <!-- Top chrome -->
+    <div class="top">
+      <button class="iconbtn" aria-label="Close">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#111" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      <button class="iconbtn" aria-label="More">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="5" r="1.6" fill="#111"/><circle cx="12" cy="12" r="1.6" fill="#111"/><circle cx="12" cy="19" r="1.6" fill="#111"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="brand">
+        <div class="brand-name">SNC Finance</div>
+        <div class="brand-tag">Loan Advisors</div>
+      </div>
+
+      <h1 class="headline">Lowest rates, fastest approvals.</h1>
+      <div class="rate">Starting from 7.75% p.a.</div>
+
+      <div class="features">
+        <div class="feature">
+          <div class="feature-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#fff" stroke-width="1.6"/><path d="M12 7v5l3.2 2" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div class="feature-label">Approval<br>in 24 hours*</div>
+        </div>
+        <div class="feature">
+          <div class="feature-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 5h10M7 9h10M9 5c3 0 5 1.5 5 4s-2 4-5 4H7l8 6" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="feature-label">Repayment<br>up to 30 years</div>
+        </div>
+        <div class="feature">
+          <div class="feature-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 3h7l5 5v13H7V3z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 3v5h5" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 13h6M10 17h4" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div class="feature-label">₹0 Prepayment<br>charges</div>
+        </div>
+      </div>
+
+      <div class="hero-img-wrap">
+        <div class="hero-img"><img src="/hero-family.png" alt="Family with home" /></div>
+      </div>
+    </section>
+
+    <!-- Partners -->
+    <div class="partners">
+      <span class="partners-label">Our partners</span>
+      <div class="partners-list">
+        <div class="chip"><span class="chip-bar" style="background:#C5453B"></span>Apex Shelter</div>
+        <div class="chip"><span class="chip-bar" style="background:#E8A04A"></span>MERIDIAN</div>
+        <div class="chip"><span class="chip-bar" style="background:#1B4D7A"></span>NorthCap</div>
+        <div class="chip"><span class="chip-bar" style="background:#1B4D7A"></span>ORBIT</div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-wrap">
+      <button id="applyBtn" class="cta">Apply now</button>
+    </div>
+
+    <!-- Consent -->
+    <div class="consent">
+      <label class="consent-row">
+        <input type="checkbox" id="agreeTerms" checked />
+        <span class="checkbox"></span>
+        <span class="consent-text">By proceeding, you agree with our <u><b>Terms of Service</b></u> &amp; <u><b>Privacy Policy</b></u></span>
+      </label>
+      <label class="consent-row">
+        <input type="checkbox" id="agreeWA" checked />
+        <span class="checkbox"></span>
+        <span class="consent-text">I agree to receive updates on WhatsApp</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Apply sheet -->
+  <div class="sheet-backdrop" id="sheetBackdrop"></div>
+  <div class="sheet" id="sheet">
+    <div class="grabber"></div>
+    <div id="sheetBody">
+      <div class="sheet-eyebrow">✦ Quick application</div>
+      <h2 class="sheet-title">Let's get you<br>the lowest rate.</h2>
+      <p class="sheet-sub">An SNC Finance advisor will call within 24 hours. No paperwork to start.</p>
+
+      <form id="leadForm" novalidate>
+        <div class="field">
+          <div class="field-head"><label>Full name<span class="req">*</span></label></div>
+          <div class="input-wrap"><input type="text" id="name" placeholder="Enter your full name" autocomplete="name" required /></div>
+          <div class="field-error" id="nameErr"></div>
+        </div>
+        <div class="field">
+          <div class="field-head"><label>Mobile number<span class="req">*</span></label></div>
+          <div class="input-wrap"><span class="prefix">+91</span><input type="tel" id="mobile" placeholder="98765 43210" inputmode="numeric" maxlength="10" autocomplete="tel-national" required /></div>
+          <div class="field-error" id="mobileErr"></div>
+        </div>
+        <div class="field">
+          <div class="field-head"><label>Email</label><span class="opt">optional</span></div>
+          <div class="input-wrap"><input type="email" id="email" placeholder="you@email.com (optional)" autocomplete="email" /></div>
+          <div class="field-error" id="emailErr"></div>
+        </div>
+
+        <button type="submit" class="submit" id="submitBtn">
+          <span id="submitLabel">Continue →</span>
+          <span id="submitSpinner" class="spinner" style="display:none"></span>
+        </button>
+
+        <div class="legal">By continuing, you agree to our <u>Terms</u> and <u>Privacy Policy</u>.<br>Your data is encrypted end-to-end.</div>
+      </form>
+    </div>
+    <div id="sheetSuccess" style="display:none">
+      <div class="success-tick"><svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h2 class="success-title" id="successTitle">Thanks.</h2>
+      <p class="success-sub">We'll call you within 24 hours.<br>Reference: <b id="refId">—</b></p>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
