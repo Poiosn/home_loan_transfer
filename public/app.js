@@ -22,6 +22,15 @@
     document.body.classList.add('sheet-open');
     setTimeout(() => document.getElementById('name').focus(), 350);
   };
+  const resetSubmitBtn = () => {
+    const btn = document.getElementById('submitBtn');
+    const label = document.getElementById('submitLabel');
+    const spin = document.getElementById('submitSpinner');
+    btn.disabled = false;
+    label.style.display = '';
+    spin.style.display = 'none';
+  };
+
   const closeSheet = () => {
     document.body.classList.remove('sheet-open');
     setTimeout(() => {
@@ -29,10 +38,15 @@
       sheetSuccess.style.display = 'none';
       document.getElementById('leadForm').reset();
       clearErrors();
+      resetSubmitBtn();
     }, 350);
   };
   applyBtn.addEventListener('click', openSheet);
   backdrop.addEventListener('click', closeSheet);
+  // Auto-close after success animation
+  document.addEventListener('click', (e) => {
+    if (e.target && e.target.id === 'doneBtn') closeSheet();
+  });
 
   // ── Validation ──
   const nameEl = document.getElementById('name');
@@ -95,6 +109,7 @@
       document.getElementById('refId').textContent = data.ref || ('HM' + data.id);
       sheetBody.style.display = 'none';
       sheetSuccess.style.display = 'block';
+      resetSubmitBtn();
 
       // Optional: fire Meta Pixel Lead event if pixel is loaded
       if (typeof fbq === 'function') {
@@ -102,7 +117,7 @@
       }
     } catch (err) {
       alert('Sorry, something went wrong. Please try again.\n\n' + err.message);
-      btn.disabled = false; label.style.display = ''; spin.style.display = 'none';
+      resetSubmitBtn();
     }
   });
 })();
